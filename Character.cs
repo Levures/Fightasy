@@ -7,7 +7,6 @@ namespace Fightasy
     {
         protected int health;
         protected int damage;
-        // Couleur de la classe dans la console.
         protected ConsoleColor classColor;
         protected string name;
         protected string capacityName;
