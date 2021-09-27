@@ -11,6 +11,7 @@ namespace Fightasy
         protected string name;
         protected string capacityName;
 
+
         public int GetDamage()  { return this.damage; }
         public int GetHealth()  { return this.health; }
         public string GetName() { return this.name;   }

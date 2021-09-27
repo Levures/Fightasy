@@ -14,8 +14,9 @@ namespace Fightasy
             damage = 2;
             capacityName = "Rage";
             raging = false;
+
         }
 
-        public override void SpecialCapacity() { raging = true; }
+        public override void SpecialCapacity() { raging = !raging; }
     }
 }

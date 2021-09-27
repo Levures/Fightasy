@@ -14,9 +14,15 @@ namespace Fightasy
         }
     
         public override void SpecialCapacity()
-        {
-            --health;
-            ++damage;
+        {            
+            if (damage > 1)
+                damage = 1;
+            else
+            {
+                ++damage;
+                --health;
+            }
+                
         }
     }
 }

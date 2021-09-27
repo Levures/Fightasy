@@ -44,18 +44,16 @@ namespace Fightasy
         {
             while (!player.isDead() && !computer.isDead())
             {
+
                 Console.Clear();
-                display.DisplayScreen();
                 playerAction = display.ChooseBox(true);
-                computerAction = rand.Next(1, 4);
-                
+                computerAction = rand.Next(1, 4);    
+                string resultAction = String.Concat(playerAction.ToString(), computerAction.ToString());
+                display.DisplayScreen(resultAction);
 
                 string[] tmpMessage1 = new string[1];
                 string[] tmpMessage2 = new string[2];
-                string resultAction = String.Concat(playerAction.ToString(), computerAction.ToString());
 
-                Console.WriteLine(resultAction + "   resultaction");
-                System.Threading.Thread.Sleep(2000);
 
                 switch (resultAction)
                 {
@@ -71,39 +69,97 @@ namespace Fightasy
 
                         display.DisplayTextBox(tmpMessage2, true);
 
-                        System.Threading.Thread.Sleep(5000);
                         break;
 
-                    case "22": //Joueur : Défend |-| IA : Defend 
-
+                    case "22": //Joueur : Défend |-| IA : Défend 
+                        tmpMessage1[0] = "Vous et votre adversaire défendez, rien ne se passe, le combat continue...";
+                        display.DisplayTextBox(tmpMessage1, false);
                         break;
 
                     case "12": //Joueur : Attaque |-| IA : Défend
-
+                        tmpMessage1[0] = "Vous attaquez mais votre adversaire se défend, votre attaque n'inflige donc pas de dégâts";
+                        display.DisplayTextBox(tmpMessage1, false);
                         break;
 
                     case "21": //Joueur : Défend |-| IA : Attaque
-
+                        tmpMessage1[0] = "Vous défendez et votre adversaire vous attaque, vous contrez son attaque et ne perdez pas de points de vie";
+                        display.DisplayTextBox(tmpMessage1, false);
                         break;
 
                     case "33": //Joueur : Spécial |-| IA : Spécial 
+                        tmpMessage1[0] = "Vous : Spécial |-| Ordinateur : Spécial";
+                        display.DisplayTextBox(tmpMessage1, false);
 
+                        player.SpecialCapacity();
+                        computer.SpecialCapacity();
+
+                        if (player.GetName() == "Tank")                        
+                            computer.Hit(player.GetDamage());
+                        
+                        if (computer.GetName() == "Tank")                        
+                            player.Hit(computer.GetDamage());
+                        
+
+                        player.SpecialCapacity();
+                        computer.SpecialCapacity();
                         break;
 
                     case "13": //Joueur : Attaque |-| IA : Spécial
+                        tmpMessage1[0] = "Vous : Attaque |-| Ordinateur : Spécial";
+                        display.DisplayTextBox(tmpMessage1, false);
 
+                        computer.SpecialCapacity();
+
+                        computer.Hit(player.GetDamage());
+
+                        if (computer.GetName() == "Tank")                        
+                            player.Hit(computer.GetDamage());
+
+                        if (computer.GetName() == "Damager")
+                            player.Hit(player.GetDamage());
+
+                        computer.SpecialCapacity();
                         break; 
 
                     case "31": //Joueur : Spécial |-| IA : Attaque
+                        tmpMessage1[0] = "Vous : Spécial |-| Ordinateur : Attaque";
+                        display.DisplayTextBox(tmpMessage1, false);
 
+                        player.SpecialCapacity();
+
+                        player.Hit(computer.GetDamage());
+
+                        if (player.GetName() == "Tank")
+                            computer.Hit(player.GetDamage());
+
+                        if (player.GetName() == "Damager")
+                            computer.Hit(computer.GetDamage());
+
+                        player.SpecialCapacity();
                         break;
 
                     case "23": //Joueur : Défend |-| IA : Spécial
+                        tmpMessage1[0] = "Vous : Défense |-| Ordinateur : Spécial";
+                        display.DisplayTextBox(tmpMessage1, false);
 
+                        computer.SpecialCapacity();
+
+                        if (computer.GetName() == "Tank")
+                            player.Hit(computer.GetDamage());
+
+                        computer.SpecialCapacity();
                         break;
 
                     case "32": //Joueur : Spécial |-| IA : Défend
+                        tmpMessage1[0] = "Vous : Spécial |-| Ordinateur : Défense";
+                        display.DisplayTextBox(tmpMessage1, false);
 
+                        player.SpecialCapacity();
+
+                        if (player.GetName() == "Tank")
+                            computer.Hit(player.GetDamage());
+
+                        player.SpecialCapacity();
                         break;
 
                     default:
@@ -111,6 +167,7 @@ namespace Fightasy
                         break;
 
                 }
+                System.Threading.Thread.Sleep(5000);
 
             }
         }
