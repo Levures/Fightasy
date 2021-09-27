@@ -36,23 +36,23 @@ namespace Fightasy
                                          "   8   ",
                                          "   O   " });
             asciiArt.Add(new string[9] { "|`-._/\\_.-`|",
-                                         "|    ||    | ",
+                                         "|    ||    |",
                                          "|___o()o___|",
                                          "|__((<>))__|",
-                                         "\\   o\\/o   /",
-                                         " \\   ||   /", 
-                                         "  \\  ||  /",
-                                         "   '.||.'", 
-                                         "     ``   " });
+                                        "\\   o\\/o   /",
+                                        " \\   ||   / ", 
+                                        "  \\  ||  /  ",
+                                         "   '.||.'   ", 
+                                         "     ``     " });
             asciiArt.Add(new string[9] { "      ,      ",
                                          "   \\  :  /   ", 
                                          "`. __/ \\__ .'",
                                          "_ _\\     /_ _",
                                          "   /_   _\\   ",
-                                         " .'  \\ /  `.",
+                                         " .'  \\ /  `. ",
                                          "   /  :  \\   ",
-                                         "      '      ",
-                                         "             " });
+                                         "      '       ",
+                                         "              " });
         }
 
         /** Méthode permettant de récupérer le choix du joueur pour le personnage et les actions.
@@ -143,11 +143,11 @@ namespace Fightasy
             Console.Write(new string(' ', sep.Length-2));
             Console.WriteLine("|");
 
-            bool empty = false;
+            // Affichage des symboles en ASCII Art en fonction des actions des joueurs.
             int firstIndex = 0;
             int lastIndex = 0;
 
-            // Affichage des symboles en ASCII Art en fonction des actions des joueurs.
+            // Affichage vide quand le joueur choisit son action.
             if (actionCode == "00")
             {
                 for (int i = 0; i < asciiArt[0].Length; i++)
@@ -157,10 +157,11 @@ namespace Fightasy
                     Console.WriteLine("|");
                 }
             }
+            // Affichage des symboles ASCII correspondant aux actions des joueurs.
             else
             {
                 firstIndex = int.Parse("" + actionCode[0]) - 1;
-                firstIndex = int.Parse("" + actionCode[1]) - 1;
+                lastIndex = int.Parse("" + actionCode[1]) - 1;
 
                 for (int i = 0; i < asciiArt[0].Length; i++)
                 {
@@ -170,6 +171,8 @@ namespace Fightasy
                     Console.WriteLine(" |");
                 }
             }
+
+            Console.WriteLine(sep);
         }
 
         /** Méthode permettant d'afficher des messages entourés d'une "boîte" faite de +, - et de |.
