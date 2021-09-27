@@ -16,8 +16,8 @@ namespace Fightasy
 
         Random rand;
 
-        public List<Character> playerCharacters = new List<Character> { new Damager(), new Tank(), new Healer() };
-        public List<Character> iaCharacters = new List<Character> { new Damager(), new Tank(), new Healer() };
+        public List<Character> playerCharacters = new List<Character> { new Damager(), new Tank(), new Healer(), new Warlock(), new Wizard() };
+        public List<Character> iaCharacters = new List<Character> { new Damager(), new Tank(), new Healer(), new Warlock(), new Wizard() };
 
         HMICUI display;
         public Controller()
@@ -54,7 +54,6 @@ namespace Fightasy
                 string[] tmpMessage1 = new string[1];
                 string[] tmpMessage2 = new string[2];
 
-
                 switch (resultAction)
                 {
                     case "11": // Joueur : Attaque |-| IA : Attaque                   
@@ -90,15 +89,19 @@ namespace Fightasy
                         tmpMessage1[0] = "Vous : Spécial |-| Ordinateur : Spécial";
                         display.DisplayTextBox(tmpMessage1, false);
 
-                        player.SpecialCapacity();
-                        computer.SpecialCapacity();
+                        if (computer.GetName() == "Wizard" && player.GetName() == "Wizard") break;
+
+                        if (computer.GetName() != "Wizard") player.SpecialCapacity();
+                        else player.Hit(1);
+
+                        if (player.GetName() != "Wizard") computer.SpecialCapacity();
+                        else computer.Hit(1);
 
                         if (player.GetName() == "Tank")                        
                             computer.Hit(player.GetDamage());
                         
                         if (computer.GetName() == "Tank")                        
                             player.Hit(computer.GetDamage());
-                        
 
                         player.SpecialCapacity();
                         computer.SpecialCapacity();
@@ -145,7 +148,7 @@ namespace Fightasy
                         computer.SpecialCapacity();
 
                         if (computer.GetName() == "Tank")
-                            player.Hit(computer.GetDamage());
+                            player.Hit(computer.GetDamage()-1);
 
                         computer.SpecialCapacity();
                         break;
@@ -157,7 +160,7 @@ namespace Fightasy
                         player.SpecialCapacity();
 
                         if (player.GetName() == "Tank")
-                            computer.Hit(player.GetDamage());
+                            computer.Hit(player.GetDamage()-1);
 
                         player.SpecialCapacity();
                         break;
@@ -167,9 +170,17 @@ namespace Fightasy
                         break;
 
                 }
-                System.Threading.Thread.Sleep(5000);
+                System.Threading.Thread.Sleep(1000);
 
             }
+        }
+
+        void Fight(bool isPlayer)
+        {
+            if (isPlayer) player.Hit(computer.GetDamage());
+            else computer.Hit(player.GetDamage());
+
+
         }
 
         static void Main()

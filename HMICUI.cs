@@ -18,7 +18,7 @@ namespace Fightasy
         List<string[]> asciiArt = new();
 
         /** Couleurs associées aux classes dans la console. */
-        List<ConsoleColor> classColors = new List<ConsoleColor> {ConsoleColor.Red, ConsoleColor.Blue, ConsoleColor.White };
+        List<ConsoleColor> classColors = new List<ConsoleColor> {ConsoleColor.Red, ConsoleColor.Cyan, ConsoleColor.White, ConsoleColor.Magenta, ConsoleColor.Blue };
 
         /** Constructeur de la classe.
          *  <param name="ctrl"> Référence du contrôleur de l'application. </param>
