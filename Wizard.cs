@@ -9,6 +9,7 @@ namespace Fightasy
         public Wizard()
         {
             name = "Wizard";
+            classColor = ConsoleColor.Blue;
             health = 3;
             damage = 1;
             capacityName = "Contre-sort";

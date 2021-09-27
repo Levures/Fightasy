@@ -7,6 +7,7 @@ namespace Fightasy
         public Warlock()
         {
             name = "Warlock";
+            classColor = ConsoleColor.Magenta;
             health = 3;
             damage = 1;
             capacityName = "Don de sang";

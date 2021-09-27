@@ -11,6 +11,7 @@ namespace Fightasy
         public Healer()
         {
             name = "Healer";
+            classColor = ConsoleColor.White;
             health = 4;
             damage = 1;
             capacityName = "Soins";

@@ -7,6 +7,7 @@ namespace Fightasy
     {
         protected int health;
         protected int damage;
+        protected ConsoleColor classColor;
         protected string name;
         protected string capacityName;
 
@@ -14,6 +15,7 @@ namespace Fightasy
         public int GetHealth()  { return this.health; }
         public string GetName() { return this.name;   }
         public string GetCapacityName() { return this.capacityName; }
+        public ConsoleColor GetClassColor() { return this.classColor; }
 
 
         public bool isDead()
