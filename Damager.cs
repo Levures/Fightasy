@@ -4,8 +4,6 @@ namespace Fightasy
 {
     class Damager : Character
     {
-        bool raging;
-        
         public Damager()
         {
             name = "Damager";
@@ -13,10 +11,6 @@ namespace Fightasy
             health = 3;
             damage = 2;
             capacityName = "Rage";
-            raging = false;
-
         }
-
-        public override void SpecialCapacity() { raging = !raging; }
     }
 }

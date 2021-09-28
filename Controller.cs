@@ -20,167 +20,231 @@ namespace Fightasy
         public List<Character> iaCharacters = new List<Character> { new Damager(), new Tank(), new Healer(), new Warlock(), new Wizard() };
 
         HMICUI display;
+
+        int gamemode;
+        int difficulty;
+
         public Controller()
         {
             display = new HMICUI(this);
-            player = playerCharacters[display.ChooseBox(false)-1];
-
-            display.DisplayTextBox(new string[1] { "FIGHTASY : le jeu de combat" }, true);
-
             rand = new();
-            computer = iaCharacters[rand.Next(3)];
-            display.DisplayTextBox(new string[2] { $" Vous avez choisi la classe {player.GetName()}"
+
+            gamemode = display.ChooseBox(0)-1;
+            
+            if (gamemode == 0)
+            {
+                difficulty = display.ChooseBox(1) - 1;
+
+                player = playerCharacters[display.ChooseBox(2) - 1];
+                computer = iaCharacters[rand.Next(iaCharacters.Count-1)];
+
+                display.DisplayTextBox(new string[1] { "FIGHTASY : le jeu de combat" }, true);
+
+                
+                display.DisplayTextBox(new string[2] { $" Vous avez choisi la classe {player.GetName()}"
                                          , $"L'IA a choisi de prendre un {computer.GetName()} !" }, true);
 
-            System.Threading.Thread.Sleep(2000);
-            Console.Clear();
-            display.DisplayTextBox(new string[1] { "FIGHTASY : le jeu de combat" }, true);
-            display.DisplayTextBox(new string[1] { " Que le combat commence !" }, true);
-            System.Threading.Thread.Sleep(1000);
-            Console.Clear();
+                System.Threading.Thread.Sleep(2000);
+                Console.Clear();
+                display.DisplayTextBox(new string[1] { "FIGHTASY : le jeu de combat" }, true);
+                display.DisplayTextBox(new string[1] { " Que le combat commence !" }, true);
+                System.Threading.Thread.Sleep(1000);
+                Console.Clear();
+            }
+            else
+            {
+                difficulty = 3;
+                //TODO
+            }
         }
 
         public void Game()
         {
-            while (!player.isDead() && !computer.isDead())
+            if(gamemode == 0)
             {
-
-                Console.Clear();
-                playerAction = display.ChooseBox(true);
-                computerAction = rand.Next(1, 4);    
-                string resultAction = String.Concat(playerAction.ToString(), computerAction.ToString());
-                display.DisplayScreen(resultAction);
-
-                string[] tmpMessage1 = new string[1];
-                string[] tmpMessage2 = new string[2];
-
-                switch (resultAction)
+                while (!player.isDead() && !computer.isDead())
                 {
-                    case "11": // Joueur : Attaque |-| IA : Attaque                   
-                        computer.Hit(player.GetDamage());
-                        player.Hit(computer.GetDamage());
+                    Console.Clear();
+                    playerAction = display.ChooseBox(3);
 
-                        tmpMessage2[0] = $"Vous infligez {player.GetDamage()} points de dégâts à votre adversaire ! " +
-                                $"Il lui reste {computer.GetHealth()} points de vie";
+                    computerAction = IAChoices();
 
-                        tmpMessage2[1] = $"Votre adversaire vous inflige {computer.GetDamage()} points de dégâts, " +
-                                    $"il vous reste {player.GetHealth()} points de vie";
+                    string resultAction = String.Concat(playerAction.ToString(), computerAction.ToString());
+                    display.DisplayScreen(resultAction);
 
-                        display.DisplayTextBox(tmpMessage2, true);
+                    string[] tmpMessage1 = new string[1];
+                    string[] tmpMessage2 = new string[2];
 
-                        break;
-
-                    case "22": //Joueur : Défend |-| IA : Défend 
-                        tmpMessage1[0] = "Vous et votre adversaire défendez, rien ne se passe, le combat continue...";
-                        display.DisplayTextBox(tmpMessage1, false);
-                        break;
-
-                    case "12": //Joueur : Attaque |-| IA : Défend
-                        tmpMessage1[0] = "Vous attaquez mais votre adversaire se défend, votre attaque n'inflige donc pas de dégâts";
-                        display.DisplayTextBox(tmpMessage1, false);
-                        break;
-
-                    case "21": //Joueur : Défend |-| IA : Attaque
-                        tmpMessage1[0] = "Vous défendez et votre adversaire vous attaque, vous contrez son attaque et ne perdez pas de points de vie";
-                        display.DisplayTextBox(tmpMessage1, false);
-                        break;
-
-                    case "33": //Joueur : Spécial |-| IA : Spécial 
-                        tmpMessage1[0] = "Vous : Spécial |-| Ordinateur : Spécial";
-                        display.DisplayTextBox(tmpMessage1, false);
-
-                        if (computer.GetName() == "Wizard" && player.GetName() == "Wizard") break;
-
-                        if (computer.GetName() != "Wizard") player.SpecialCapacity();
-                        else player.Hit(1);
-
-                        if (player.GetName() != "Wizard") computer.SpecialCapacity();
-                        else computer.Hit(1);
-
-                        if (player.GetName() == "Tank")                        
+                    switch (resultAction)
+                    {
+                        case "11": // Joueur : Attaque |-| IA : Attaque                   
                             computer.Hit(player.GetDamage());
-                        
-                        if (computer.GetName() == "Tank")                        
                             player.Hit(computer.GetDamage());
 
-                        player.SpecialCapacity();
-                        computer.SpecialCapacity();
-                        break;
+                            tmpMessage2[0] = $"Vous infligez {player.GetDamage()} points de dégâts à votre adversaire ! " +
+                                    $"Il lui reste {computer.GetHealth()} points de vie";
 
-                    case "13": //Joueur : Attaque |-| IA : Spécial
-                        tmpMessage1[0] = "Vous : Attaque |-| Ordinateur : Spécial";
-                        display.DisplayTextBox(tmpMessage1, false);
+                            tmpMessage2[1] = $"Votre adversaire vous inflige {computer.GetDamage()} points de dégâts, " +
+                                        $"il vous reste {player.GetHealth()} points de vie";
 
-                        computer.SpecialCapacity();
+                            display.ColoredMessage(tmpMessage2, resultAction);
+                            break;
 
-                        computer.Hit(player.GetDamage());
+                        case "22": //Joueur : Défend |-| IA : Défend 
+                            tmpMessage1[0] = "Les deux joueurs se défendent";
+                            display.ColoredMessage(tmpMessage1, resultAction);
+                            break;
 
-                        if (computer.GetName() == "Tank")                        
-                            player.Hit(computer.GetDamage());
+                        case "12": //Joueur : Attaque |-| IA : Défend
+                            tmpMessage1[0] = "Vous attaquez, mais votre adversaire se défend";
+                            display.ColoredMessage(tmpMessage1, resultAction);
+                            break;
 
-                        if (computer.GetName() == "Damager")
-                            player.Hit(player.GetDamage());
+                        case "21": //Joueur : Défend |-| IA : Attaque
+                            tmpMessage1[0] = "Vous vous défendez face à l'attaque ennemie";
+                            display.ColoredMessage(tmpMessage1, resultAction);
+                            break;
 
-                        computer.SpecialCapacity();
-                        break; 
+                        case "33": //Joueur : Spécial |-| IA : Spécial 
+                            tmpMessage1[0] = $"Vous utilisez {player.GetCapacityName()} contre {computer.GetCapacityName()}";
+                            display.ColoredMessage(tmpMessage1, resultAction);
 
-                    case "31": //Joueur : Spécial |-| IA : Attaque
-                        tmpMessage1[0] = "Vous : Spécial |-| Ordinateur : Attaque";
-                        display.DisplayTextBox(tmpMessage1, false);
+                            player.SpecialCapacity();
+                            computer.SpecialCapacity();
 
-                        player.SpecialCapacity();
+                            if (player.GetName() == "Tank")
+                                computer.Hit(player.GetDamage());
 
-                        player.Hit(computer.GetDamage());
+                            if (computer.GetName() == "Tank")
+                                player.Hit(computer.GetDamage());
 
-                        if (player.GetName() == "Tank")
+
+                            player.SpecialCapacity();
+                            computer.SpecialCapacity();
+                            break;
+
+                        case "13": //Joueur : Attaque |-| IA : Spécial
+                            tmpMessage1[0] = $"Vous attaquez contre {computer.GetCapacityName()}";
+                            display.ColoredMessage(tmpMessage1, resultAction);
+
+                            computer.SpecialCapacity();
+
                             computer.Hit(player.GetDamage());
 
-                        if (player.GetName() == "Damager")
-                            computer.Hit(computer.GetDamage());
+                            if (computer.GetName() == "Tank")
+                                player.Hit(computer.GetDamage());
 
-                        player.SpecialCapacity();
-                        break;
+                            if (computer.GetName() == "Damager")
+                                player.Hit(player.GetDamage());
 
-                    case "23": //Joueur : Défend |-| IA : Spécial
-                        tmpMessage1[0] = "Vous : Défense |-| Ordinateur : Spécial";
-                        display.DisplayTextBox(tmpMessage1, false);
+                            computer.SpecialCapacity();
+                            break;
 
-                        computer.SpecialCapacity();
+                        case "31": //Joueur : Spécial |-| IA : Attaque
+                            tmpMessage1[0] = $"Vous utilisez {player.GetCapacityName()} contre l'attaque ennemie";
+                            display.ColoredMessage(tmpMessage1, resultAction);
 
-                        if (computer.GetName() == "Tank")
-                            player.Hit(computer.GetDamage()-1);
+                            player.SpecialCapacity();
 
-                        computer.SpecialCapacity();
-                        break;
+                            player.Hit(computer.GetDamage());
 
-                    case "32": //Joueur : Spécial |-| IA : Défend
-                        tmpMessage1[0] = "Vous : Spécial |-| Ordinateur : Défense";
-                        display.DisplayTextBox(tmpMessage1, false);
+                            if (player.GetName() == "Tank")
+                                computer.Hit(player.GetDamage());
 
-                        player.SpecialCapacity();
+                            if (player.GetName() == "Damager")
+                                computer.Hit(computer.GetDamage());
 
-                        if (player.GetName() == "Tank")
-                            computer.Hit(player.GetDamage()-1);
+                            player.SpecialCapacity();
+                            break;
 
-                        player.SpecialCapacity();
-                        break;
+                        case "23": //Joueur : Défend |-| IA : Spécial
+                            tmpMessage1[0] = $"Vous essayez de vous défendre contre {computer.GetCapacityName()}";
+                            display.ColoredMessage(tmpMessage1, resultAction);
 
-                    default:
-                        Console.WriteLine("WIP");
-                        break;
+                            computer.SpecialCapacity();
+
+                            if (computer.GetName() == "Tank")
+                                player.Hit(computer.GetDamage()-1);
+
+                            computer.SpecialCapacity();
+                            break;
+
+                        case "32": //Joueur : Spécial |-| IA : Défend
+                            tmpMessage1[0] = $"Vous utilisez {player.GetCapacityName()} contre la défense ennemie";
+                            display.ColoredMessage(tmpMessage1, resultAction);
+
+                            player.SpecialCapacity();
+
+                            if (player.GetName() == "Tank")
+                                computer.Hit(player.GetDamage());
+
+                            player.SpecialCapacity();
+                            break;
+
+                        default:
+                            Console.WriteLine("WIP");
+                            break;
+
+
+                    }
+                    System.Threading.Thread.Sleep(1000);
 
                 }
-                System.Threading.Thread.Sleep(1000);
-
+            }
+            else
+            {
+                // TODO
             }
         }
 
-        void Fight(bool isPlayer)
+        int IAChoices()
         {
-            if (isPlayer) player.Hit(computer.GetDamage());
-            else computer.Hit(player.GetDamage());
+            // Choix de l'action de l'IA.
+            if (difficulty == 2) return rand.Next(1, 4);
+            else
+            {
+                switch (playerAction)
+                {
+                    // Le joueur attaque.
+                    case 1:
+                        if (difficulty == 3)
+                        {
+                            if (computer.GetName() == "Tank")
+                            {
+                                if (computer.GetHealth() - 1 > player.GetDamage()) return rand.Next(3) <= 1 ? 3 : rand.Next(1, 4);
+                                else if (computer.GetHealth() - 1 > player.GetDamage()) return rand.Next(3) <= 1 ? 1 : rand.Next(1, 4);
+                                else return rand.Next(3) <= 1 ? 2 : rand.Next(1, 4);
+                            }
+                            else
+                            {
+                                if (computer.GetHealth() > player.GetDamage()) return rand.Next(3) <= 1 ? 1 : rand.Next(1, 4);
+                                else return rand.Next(3) <= 1 ? 2 : rand.Next(1, 4);
+                            }
+                        }
+                        else return rand.Next(3) <= 1 ? 1 : rand.Next(1, 4);
+                        break;
 
+                    case 2:
+                        if (difficulty == 3)
+                        {
+                            if (computer.GetName() == "Damager" || computer.GetName() == "Wizard") return rand.Next(1, 4);
+                            else return rand.Next(3) <= 1 ? 3 : rand.Next(1, 4);
+                        }
+                        else return rand.Next(3) <= 1 ? 2 : rand.Next(1, 4);
+                        break;
 
+                    case 3:
+                        if (difficulty == 3)
+                        {
+                            if (player.GetName() == "Warlock" || player.GetName() == "Healer") return rand.Next(3) <= 1 ? 1 : rand.Next(1, 4);
+                            else return rand.Next(3) <= 1 ? 2 : rand.Next(1, 4);
+                        }
+                        else return rand.Next(3) <= 1 ? 2 : rand.Next(1, 4);
+                        break;
+                }
+                return -1;
+            }
+            
         }
 
         static void Main()

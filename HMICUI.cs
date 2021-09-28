@@ -23,7 +23,7 @@ namespace Fightasy
         /** Constructeur de la classe.
          *  <param name="ctrl"> Référence du contrôleur de l'application. </param>
          */
-        public HMICUI(Controller ctrl) 
+        public HMICUI(Controller ctrl)
         { 
             this.ctrl = ctrl;
             asciiArt.Add(new string[9] { "   .   ",
@@ -56,11 +56,12 @@ namespace Fightasy
         }
 
         /** Méthode permettant de récupérer le choix du joueur pour le personnage et les actions.
-         *  <param name="actions"> Permet de savoir si le choix porte sur les personnages ou les actions. </param>
+         *  <param name="usage"> Permet de savoir si le choix porte sur les personnages ou les actions. </param>
          *  <returns> La selection de l'utilisateur sous forme d'index. </returns>
          */
-        public int ChooseBox(bool actions)
+        public int ChooseBox(int usage)
         {
+            int lineCount = 0;
             // La sélection par défaut est 1.
             int selection = 1;
             // Booléen permettant de savoir si on quitte la méthode lorsque le joueur a choisi.
@@ -72,8 +73,21 @@ namespace Fightasy
                 Console.Clear();
                 // La méthode fonctionne pour les actions et les personnages il faut donc savoir dans
                 // quel cas elle a été appellée en fonction du booléen "actions" passé en paramètre.
-                if (actions) DisplayActions(selection);
-                else DisplayCharacters(selection);
+                switch (usage)
+                {
+                    case 0: DisplayGamemode(selection);
+                        lineCount = 2;
+                        break;
+                    case 1: DisplayDifficulty(selection);
+                        lineCount = 3;
+                        break;
+                    case 2: DisplayCharacters(selection);
+                        lineCount = ctrl.playerCharacters.Count;
+                        break;
+                    case 3: DisplayActions(selection);
+                        lineCount = 3;
+                        break;
+                }
 
                 // Enregistrement de la touche pressée par l'utilisateur.
                 ConsoleKeyInfo keyPressed = Console.ReadKey();
@@ -83,7 +97,7 @@ namespace Fightasy
                 {
                     case ConsoleKey.DownArrow: // Descend le curseur.
                         // Si le curseur est en bas il revient en première position.
-                        if (selection == ctrl.playerCharacters.Count) selection = 1;
+                        if (selection == lineCount) selection = 1;
                         // Sinon il descend simplement.
                         else selection += 1;
 
@@ -91,7 +105,7 @@ namespace Fightasy
 
                     case ConsoleKey.UpArrow: // Monte le curseur.
                         // Si le curseur est tout en haut il va en dernière position.
-                        if (selection == 1) selection = ctrl.playerCharacters.Count;
+                        if (selection == 1) selection = lineCount;
                         // Sinon il monte simplement.
                         else selection -= 1;
 
@@ -173,6 +187,110 @@ namespace Fightasy
             }
 
             Console.WriteLine(sep);
+        }
+
+        void DisplayDifficulty(int selection)
+        {
+            // Affichage du titre de la boîte.
+            string sep = "+----------------------------------------+";
+            string title = "|      FIGHTASY : le jeu de combat       |";
+            string sep2 = "+---+------------------------------------+";
+            Console.WriteLine(sep + "\n" + title + "\n" + sep);
+
+            Console.WriteLine("|   Choisissez la difficulté de l'IA :   |");
+            Console.WriteLine(sep2);
+
+            // Affichage de la première ligne.
+            Console.Write("| ");
+            if (selection == 1) WriteInColor(ConsoleColor.Green, "1");
+            else Console.Write("1");
+            Console.Write(" | ");
+
+            if (selection == 1) WriteInColor(ConsoleColor.Green, "             Facile               ");
+            else Console.Write("             Facile               ");
+
+            Console.Write(" |");
+
+            if (selection == 1) WriteInColor(ConsoleColor.Green, cursor);
+
+            Console.WriteLine("\n" + sep2);
+
+            // Affichage de la deuxième ligne.
+
+            Console.Write("| ");
+            if (selection == 2) WriteInColor(ConsoleColor.Green, "2");
+            else Console.Write("2");
+            Console.Write(" | ");
+
+            if (selection == 2) WriteInColor(ConsoleColor.Green, "             Normal               ");
+            else Console.Write("             Normal               ");
+
+            Console.Write(" |");
+
+            if (selection == 2) WriteInColor(ConsoleColor.Green, cursor);
+
+            Console.WriteLine("\n" + sep2);
+
+            // Affichage de la troisième ligne.
+
+            Console.Write("| ");
+            if (selection == 3) WriteInColor(ConsoleColor.Green, "3");
+            else Console.Write("3");
+            Console.Write(" | ");
+
+            if (selection == 3) WriteInColor(ConsoleColor.Green, "            Difficile             ");
+            else Console.Write("            Difficile             ");
+
+            Console.Write(" |");
+
+            if (selection == 3) WriteInColor(ConsoleColor.Green, cursor);
+
+            Console.WriteLine("\n" + sep2);
+
+        }
+
+        void DisplayGamemode(int selection)
+        {
+            // Affichage du titre de la boîte.
+            string sep   = "+----------------------------------------+";
+            string title = "|      FIGHTASY : le jeu de combat       |";
+            string sep2  = "+---+------------------------------------+";
+            Console.WriteLine(sep + "\n" + title + "\n" + sep);
+
+            Console.WriteLine("|     Choisissez votre mode de jeu :     |");
+            Console.WriteLine(sep2);
+
+            // Affichage de la première ligne.
+            Console.Write("| ");
+            if (selection == 1) WriteInColor(ConsoleColor.Green, "1");
+            else Console.Write("1");
+            Console.Write(" | ");
+
+            if (selection == 1) WriteInColor(ConsoleColor.Green, "Fightasy classic (Joueur VS IA)   ");
+            else Console.Write("Fightasy classic (Joueur VS IA)   ");
+
+            Console.Write(" |");
+
+            if (selection == 1) WriteInColor(ConsoleColor.Green, cursor);
+
+            Console.WriteLine("\n" + sep2);
+
+            // Affichage de la deuxième ligne.
+
+            Console.Write("| ");
+            if (selection == 2) WriteInColor(ConsoleColor.Green, "2");
+            else Console.Write("2");
+            Console.Write(" | ");
+
+            if (selection == 2) WriteInColor(ConsoleColor.Green, "Fightasy simulator (IA VS IA)     ");
+            else Console.Write("Fightasy simulator (IA VS IA)     ");
+
+            Console.Write(" |");
+
+            if (selection == 2) WriteInColor(ConsoleColor.Green, cursor);
+
+            Console.WriteLine("\n" + sep2);
+
         }
 
         /** Méthode permettant d'afficher des messages entourés d'une "boîte" faite de +, - et de |.
@@ -343,6 +461,93 @@ namespace Fightasy
             Console.ForegroundColor = color;
             Console.Write(msg);
             Console.ForegroundColor = ConsoleColor.Gray;
+        }
+
+        public void ColoredMessage(string[] message, string resultAction, bool textBoxSep = true)
+        {
+            int coloredTime = 70;
+            int msgTime = 2000;
+            ConsoleColor firstColor = new ConsoleColor();
+            ConsoleColor secondColor = new ConsoleColor();
+            switch (resultAction[0])
+            {
+                case '1': firstColor = ConsoleColor.Red; break;
+                case '3': firstColor = ctrl.player.GetClassColor(); break;
+                default: break;
+            }
+            switch (resultAction[1])
+            {
+                case '1': secondColor = ConsoleColor.Red; break;
+                case '3': secondColor = ctrl.computer.GetClassColor(); break;
+                default: break;
+            }
+
+            if (resultAction[0] != '2' && resultAction[1] != '2')
+            {
+                Console.Clear();
+                Console.BackgroundColor = firstColor;
+                DisplayScreen(resultAction);
+                Console.BackgroundColor = ConsoleColor.Black;
+                DisplayTextBox(message, true);
+                System.Threading.Thread.Sleep(coloredTime);
+
+                Console.Clear();
+                DisplayScreen(resultAction);
+                DisplayTextBox(message, true);
+                System.Threading.Thread.Sleep(coloredTime * 2);
+
+                Console.Clear();
+                Console.BackgroundColor = secondColor;
+                DisplayScreen(resultAction);
+                Console.BackgroundColor = ConsoleColor.Black;
+                DisplayTextBox(message, true);
+                System.Threading.Thread.Sleep(coloredTime);
+
+                Console.Clear();
+                DisplayScreen(resultAction);
+                DisplayTextBox(message, true);
+                System.Threading.Thread.Sleep(msgTime);
+            }
+
+            if (resultAction[0] == '2' && resultAction[1] != '2')
+            {
+                System.Threading.Thread.Sleep(coloredTime);
+
+                Console.Clear();
+                Console.BackgroundColor = secondColor;
+                DisplayScreen(resultAction);
+                Console.BackgroundColor = ConsoleColor.Black;
+                DisplayTextBox(message, true);
+                System.Threading.Thread.Sleep(coloredTime);
+
+                Console.Clear();
+                DisplayScreen(resultAction);
+                DisplayTextBox(message, true);
+                System.Threading.Thread.Sleep(msgTime);
+            }
+
+            if (resultAction[0] != '2' && resultAction[1] == '2')
+            {
+                Console.Clear();
+                Console.BackgroundColor = firstColor;
+                DisplayScreen(resultAction);
+                Console.BackgroundColor = ConsoleColor.Black;
+                DisplayTextBox(message, true);
+                System.Threading.Thread.Sleep(coloredTime);
+
+
+                Console.Clear();
+                DisplayScreen(resultAction);
+                DisplayTextBox(message, true);
+                System.Threading.Thread.Sleep(msgTime);
+
+            }
+
+            if (resultAction[0] == '2' && resultAction[1] == '2')
+            {
+                System.Threading.Thread.Sleep(msgTime);
+            }
+
         }
     }
 }
