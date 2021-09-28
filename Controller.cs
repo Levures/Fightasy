@@ -24,6 +24,8 @@ namespace Fightasy
         int gamemode;
         int difficulty;
 
+        int[,] scores = new int[5,5]; // Pour la simulation
+
         public Controller()
         {
             display = new HMICUI(this);
@@ -51,10 +53,12 @@ namespace Fightasy
                 System.Threading.Thread.Sleep(1000);
                 Console.Clear();
             }
-            else
+            else // Simulation
             {
                 difficulty = 3;
-                //TODO
+                
+
+                display.DisplayTextBox(new string[1] { "La simulation commence" }, true);
             }
         }
 
@@ -176,7 +180,7 @@ namespace Fightasy
                             player.SpecialCapacity();
 
                             if (player.GetName() == "Tank")
-                                computer.Hit(player.GetDamage());
+                                computer.Hit(player.GetDamage()-1);
 
                             player.SpecialCapacity();
                             break;
@@ -193,7 +197,123 @@ namespace Fightasy
             }
             else
             {
-                // TODO
+                List<Character> playerCharacters = new List<Character> { new Damager(), new Tank(), new Healer(), new Warlock(), new Wizard() };
+                List<Character> iaCharacters = new List<Character> { new Damager(), new Tank(), new Healer(), new Warlock(), new Wizard() };
+
+
+                for (int a = 0; a < 100; a++)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {                
+                        for (int k = 0; k < 5; k++)
+                        {
+                            Console.WriteLine("j : " + j + "  k : " + k);
+                            if (j != k)
+                            {
+                                player = playerCharacters[j];
+                                computer = iaCharacters[k];
+                                int nbTurn = 0;
+                                while (!player.isDead() && !computer.isDead() && nbTurn < 50)
+                                {
+
+                                    computerAction = rand.Next(1, 4);
+                                    playerAction = rand.Next(1, 4);
+
+                                    string resultAction = String.Concat(playerAction.ToString(), computerAction.ToString());
+
+                                    switch (resultAction)
+                                    {
+                                        case "11": // Joueur : Attaque |-| IA : Attaque                   
+                                            computer.Hit(player.GetDamage());
+                                            player.Hit(computer.GetDamage());
+                                            break;
+
+                                        case "33": //Joueur : Spécial |-| IA : Spécial 
+                                            player.SpecialCapacity();
+                                            computer.SpecialCapacity();
+
+                                            if (player.GetName() == "Tank")
+                                                computer.Hit(player.GetDamage());
+
+                                            if (computer.GetName() == "Tank")
+                                                player.Hit(computer.GetDamage());
+
+                                            player.SpecialCapacity();
+                                            computer.SpecialCapacity();
+                                            break;
+
+                                        case "13": //Joueur : Attaque |-| IA : Spécial
+                                            computer.SpecialCapacity();
+
+                                            computer.Hit(player.GetDamage());
+
+                                            if (computer.GetName() == "Tank")
+                                                player.Hit(computer.GetDamage());
+
+                                            if (computer.GetName() == "Damager")
+                                                player.Hit(player.GetDamage());
+
+                                            computer.SpecialCapacity();
+                                            break;
+
+                                        case "31": //Joueur : Spécial |-| IA : Attaque
+                                            player.SpecialCapacity();
+
+                                            player.Hit(computer.GetDamage());
+
+                                            if (player.GetName() == "Tank")
+                                                computer.Hit(player.GetDamage());
+
+                                            if (player.GetName() == "Damager")
+                                                computer.Hit(computer.GetDamage());
+
+                                            player.SpecialCapacity();
+                                            break;
+
+                                        case "23": //Joueur : Défend |-| IA : Spécial
+                                            computer.SpecialCapacity();
+
+                                            if (computer.GetName() == "Tank")
+                                                player.Hit(computer.GetDamage() - 1);
+
+                                            computer.SpecialCapacity();
+                                            break;
+
+                                        case "32": //Joueur : Spécial |-| IA : Défend
+                                            player.SpecialCapacity();
+
+                                            if (player.GetName() == "Tank")
+                                                computer.Hit(player.GetDamage() - 1);
+
+                                            player.SpecialCapacity();
+                                            break;
+
+                                        default:
+                                            break;
+                                    }
+                                    display.DisplayTextBox(new string[2] { $"Joueur : {player.GetName()}, {player.GetHealth()}", $"IA : {computer.GetName()}, {computer.GetHealth()}" }, true);
+                                    nbTurn += 1;
+                                }
+
+                                if (player.GetHealth() <= 0 && computer.GetHealth() <= 0)
+                                {
+                                    scores[j, k] += 10;
+
+                                }
+                                else if (player.GetHealth() <= 0 && computer.GetHealth() > 0)
+                                    scores[j, k] += 5;
+
+                                playerCharacters = new List<Character> { new Damager(), new Tank(), new Healer(), new Warlock(), new Wizard() };
+                                iaCharacters = new List<Character> { new Damager(), new Tank(), new Healer(), new Warlock(), new Wizard() };
+                            }
+                            
+                        }
+
+                    }                     
+                }
+
+                display.DisplayStats(scores);
+                Console.ReadLine();
             }
         }
 

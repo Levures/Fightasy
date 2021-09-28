@@ -549,5 +549,93 @@ namespace Fightasy
             }
 
         }
+
+        public void DisplayStats(int[,] scores)
+        {
+            Console.Clear();
+
+
+            string sep =       "+---------+---------+---------+---------+---------+---------+";
+            string sepEmpty =  "|         |         |         |         |         |         |";
+            Console.WriteLine($"{sep} \n{sepEmpty}");
+            Console.Write("|    X    |");
+            WriteInColor(ConsoleColor.DarkRed, " Damager ");
+            Console.Write("|");
+            WriteInColor(ConsoleColor.Cyan, "  Tank   ");
+            Console.Write("|");
+            WriteInColor(ConsoleColor.White, "  Healer ");
+            Console.Write("|");
+            WriteInColor(ConsoleColor.Magenta, " Warlock ");
+            Console.Write("|");
+            WriteInColor(ConsoleColor.Blue, "  Wizard ");
+            Console.WriteLine("|");
+            Console.WriteLine(sepEmpty);
+
+            for (int j = 0; j < 5; j++)
+            {
+                Console.WriteLine(sep);
+                Console.WriteLine(sepEmpty);
+                switch (j)
+                {
+                    case 0: Console.Write("|");  WriteInColor(ConsoleColor.DarkRed, " Damager "); break;
+                    case 1: Console.Write("|");  WriteInColor(ConsoleColor.Cyan, "  Tank   "); break;
+                    case 2: Console.Write("|");  WriteInColor(ConsoleColor.White, "  Healer "); break;
+                    case 3: Console.Write("|");  WriteInColor(ConsoleColor.Magenta, " Warlock "); break;
+                    case 4: Console.Write("|");  WriteInColor(ConsoleColor.Blue, "  Wizard "); break;
+                }
+                for (int k = 0; k < 5; k++)
+                {
+
+                    if (scores[j, k] <= 500)
+                    {
+                        if (scores[j, k] == 0)
+                        {
+                            Console.Write("|    X    ");
+                        }
+                        else if (scores[j, k].ToString().Length > 2)
+                        {
+                            Console.Write($"|   ");
+                            int score = 100 - (scores[j, k] / 10);
+                            WriteInColor(ConsoleColor.Green, score.ToString() + "%");
+                            Console.Write("   ");
+                        } 
+                        else
+                        {
+                            Console.Write($"|   ");
+                            int score = 100 - (scores[j, k] / 10);
+                            WriteInColor(ConsoleColor.Green, score.ToString() + "%");
+                            Console.Write("    ");
+                        }
+                            
+                    }
+                    else
+                    {
+                        if (scores[j, k] == 0)
+                        {
+                            Console.Write("|    X    ");
+                        }
+                        else if (scores[j, k].ToString().Length > 2)
+                        {
+                            Console.Write($"|   ");
+                            int score = 100 -(scores[j, k] / 10);
+                            WriteInColor(ConsoleColor.Red, score.ToString() + "%");
+                            Console.Write("   ");
+                        }
+                        else
+                        {
+                            Console.Write($"|   ");
+                            int score = 100 - (scores[j, k] / 10);
+                            WriteInColor(ConsoleColor.Red, score.ToString() + "%");
+                            Console.Write("    ");
+                        }
+                    }                    
+
+
+                }
+                Console.WriteLine("|");
+                Console.WriteLine(sepEmpty);
+            }
+            Console.WriteLine(sep);
+        }
     }
 }

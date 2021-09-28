@@ -9,7 +9,7 @@ namespace Fightasy
             name = "Wizard";
             classColor = ConsoleColor.Blue;
             health = 3;
-            damage = 1;
+            damage = 2;
             capacityName = "Contre-sort";
         }
     }
