@@ -176,7 +176,7 @@ namespace Fightasy
                             player.SpecialCapacity();
 
                             if (player.GetName() == "Tank")
-                                computer.Hit(player.GetDamage());
+                                computer.Hit(player.GetDamage()-1);
 
                             player.SpecialCapacity();
                             break;
