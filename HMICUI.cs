@@ -585,52 +585,25 @@ namespace Fightasy
                 }
                 for (int k = 0; k < 5; k++)
                 {
+                    int score = 100 - scores[j,k] / 10;
+                    ConsoleColor color;
+                    if (score <= 50) color = ConsoleColor.Red;
+                    else color = ConsoleColor.Green;
 
-                    if (scores[j, k] <= 500)
+                    if (j == k)
                     {
-                        if (scores[j, k] == 0)
-                        {
-                            Console.Write("|    X    ");
-                        }
-                        else if (scores[j, k].ToString().Length > 2)
-                        {
-                            Console.Write($"|   ");
-                            int score = 100 - (scores[j, k] / 10);
-                            WriteInColor(ConsoleColor.Green, score.ToString() + "%");
-                            Console.Write("   ");
-                        } 
-                        else
-                        {
-                            Console.Write($"|   ");
-                            int score = 100 - (scores[j, k] / 10);
-                            WriteInColor(ConsoleColor.Green, score.ToString() + "%");
-                            Console.Write("    ");
-                        }
-                            
+                        Console.Write("|    X    ");
                     }
+                    else if (score.ToString().Length >= 2)
+                    {
+                        Console.Write($"|   ");
+                        WriteInColor(color, score.ToString() + "%   ");
+                    } 
                     else
                     {
-                        if (scores[j, k] == 0)
-                        {
-                            Console.Write("|    X    ");
-                        }
-                        else if (scores[j, k].ToString().Length > 2)
-                        {
-                            Console.Write($"|   ");
-                            int score = 100 -(scores[j, k] / 10);
-                            WriteInColor(ConsoleColor.Red, score.ToString() + "%");
-                            Console.Write("   ");
-                        }
-                        else
-                        {
-                            Console.Write($"|   ");
-                            int score = 100 - (scores[j, k] / 10);
-                            WriteInColor(ConsoleColor.Red, score.ToString() + "%");
-                            Console.Write("    ");
-                        }
-                    }                    
-
-
+                        Console.Write($"|    ");
+                        WriteInColor(color, score.ToString() + "%   ");
+                    }
                 }
                 Console.WriteLine("|");
                 Console.WriteLine(sepEmpty);

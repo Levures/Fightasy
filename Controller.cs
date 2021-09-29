@@ -197,15 +197,17 @@ namespace Fightasy
             }
             else
             {
-                List<Character> playerCharacters = new List<Character> { new Damager(), new Tank(), new Healer(), new Warlock(), new Wizard() };
+                List<Character> playerCharacters = new List<Character> { new Damager(), new Tank(), new Healer(), new Warlock()};
                 List<Character> iaCharacters = new List<Character> { new Damager(), new Tank(), new Healer(), new Warlock(), new Wizard() };
 
+                for (int j = 0; j < playerCharacters.Count; j++) for (int k = j; k < 5; k++) scores[k, j] = 1000;
+                    
 
                 for (int a = 0; a < 100; a++)
                 {
-                    for (int j = 0; j < 5; j++)
-                    {                
-                        for (int k = 0; k < 5; k++)
+                    for (int j = 0; j < playerCharacters.Count; j++)
+                    {
+                        for (int k = j; k < 5; k++)
                         {
                             Console.WriteLine("j : " + j + "  k : " + k);
                             if (j != k)
@@ -298,10 +300,14 @@ namespace Fightasy
                                 if (player.GetHealth() <= 0 && computer.GetHealth() <= 0)
                                 {
                                     scores[j, k] += 10;
+                                    scores[k, j] -= 10;
 
                                 }
                                 else if (player.GetHealth() <= 0 && computer.GetHealth() > 0)
+                                {
                                     scores[j, k] += 5;
+                                    scores[k, j] -= 5;
+                                }
 
                                 playerCharacters = new List<Character> { new Damager(), new Tank(), new Healer(), new Warlock(), new Wizard() };
                                 iaCharacters = new List<Character> { new Damager(), new Tank(), new Healer(), new Warlock(), new Wizard() };
