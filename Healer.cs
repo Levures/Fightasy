@@ -20,16 +20,6 @@ namespace Fightasy
             usedHeal = false;
             description = "Récupère un point de vie (+♥).";
         }
-
-        public override void SpecialCapacity() 
-        {
-            if (!usedHeal)
-            {
-                ++health;
-                usedHeal = true;
-            }
-            else
-                usedHeal = false;
-        }
+        public override void SpecialCapacity() { ++health; }
     }
 }

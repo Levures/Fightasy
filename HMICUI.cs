@@ -223,6 +223,7 @@ namespace Fightasy
             Console.WriteLine(sep);
         }
 
+        /** Méthode qui affiche le menu de choix de la difficulté. */
         void DisplayDifficulty(int selection)
         {
             // Affichage du titre de la boîte.
@@ -283,6 +284,7 @@ namespace Fightasy
 
         }
 
+        /** Méthode qui affiche le menu de choix du mode de jeu. */
         void DisplayGamemode(int selection)
         {
             // Affichage du titre de la boîte.
@@ -327,9 +329,15 @@ namespace Fightasy
 
         }
 
+        /** Méthode qui affiche le menu de choix de rejouer ou non. */
         void DisplayPlayAgain(int selection)
         {
+            ConsoleColor color = ConsoleColor.Gray;
+            if (gameResult == 0) color = ConsoleColor.Green;
+            else if (gameResult == 2) color = ConsoleColor.Red;
+            Console.ForegroundColor = color;
             foreach (string line in endGameMessages[gameResult]) Console.WriteLine(line);
+            Console.ForegroundColor = ConsoleColor.Gray;
 
             Console.WriteLine("");
 
@@ -476,9 +484,9 @@ namespace Fightasy
             DisplayTextBox(new string[1] { "FIGHTASY : le jeu de combat" }, true);
 
             // Affichage du titre de la boîte.
-            string sep = "+---+---------+-------+----+";
-            Console.WriteLine("+--------------------------+");
-            Console.WriteLine("|    Choisis ta classe     |");
+            string sep = "+---+---------+-------+-----+";
+            Console.WriteLine("+---------------------------+");
+            Console.WriteLine("|    Choisis ta classe      |");
             Console.WriteLine(sep);
 
             // Pour chaque personnage on affiche une ligne avec son nom, sa vie et son attaque.
@@ -508,7 +516,7 @@ namespace Fightasy
 
                 WriteInColor(ConsoleColor.White, " " + new string('♦', damage));
 
-                Console.Write(new string(' ', 2 - damage) + " |");
+                Console.Write(new string(' ', 3 - damage) + " |");
 
                 if (selection == i) WriteInColor(ConsoleColor.Green, cursor);
 
@@ -516,6 +524,7 @@ namespace Fightasy
 
                 
             }
+            // Affiche les descriptions des personnages.
             Console.WriteLine("");
             DisplayTextBox(new string[2] { ctrl.playerCharacters[selection - 1].GetCapacityName(), ctrl.playerCharacters[selection - 1].GetDescription() }, false);
         }
@@ -530,28 +539,37 @@ namespace Fightasy
             Console.Write(msg);
             Console.ForegroundColor = ConsoleColor.Gray;
         }
-        //Changement de la couleur de l'espace de jeu en fonction de l'action choisie
-        public void ColoredScreen(string resultAction, bool textBoxSep = true)
+
+        /** Méthode permettant de changer la couleur de l'espace de jeu en fonction de l'action choisie 
+         *  <param name="resultAction"> Le code des actions du tour. </param>
+         */
+        public void ColoredScreen(string resultAction)
         {
+            // Le temps en milisecondes du flash de couleur.
             int coloredTime = 70;
-            int msgTime = 2000;
+            // Couleur pour l'action du joueur.
             ConsoleColor firstColor = new ConsoleColor();
+            // Couleur pour l'action de l'IA.
             ConsoleColor secondColor = new ConsoleColor();
-            //Assignation de la couleur du spécial en fonction de la classe
+
+            // Assignation de la couleur du code d'action.
             switch (resultAction[0])
             {
+                // Attaque en rouge.
                 case '1': firstColor = ConsoleColor.Red; break;
+                // Spécial de la couleur de la classe.
                 case '3': firstColor = ctrl.player.GetClassColor(); break;
-                default: break;
             }
             switch (resultAction[1])
             {
+                // Attaque en rouge.
                 case '1': secondColor = ConsoleColor.Red; break;
+                // Spécial de la couleur de la classe.
                 case '3': secondColor = ctrl.computer.GetClassColor(); break;
-                default: break;
             }
-            //Couleurs quand aucun des deux joueurs défendent
-            if (resultAction[0] != '2' && resultAction[1] != '2')
+
+            // Si le joueur ne défend pas on fait un effet de couleur.
+            if(resultAction[0] != '2')
             {
                 Console.Clear();
                 Console.BackgroundColor = firstColor;
@@ -562,32 +580,9 @@ namespace Fightasy
                 Console.Clear();
                 DisplayScreen(resultAction);
                 System.Threading.Thread.Sleep(coloredTime * 2);
-
-                Console.Clear();
-                Console.BackgroundColor = secondColor;
-                DisplayScreen(resultAction);
-                Console.BackgroundColor = ConsoleColor.Black;
-                System.Threading.Thread.Sleep(coloredTime);
-
-                Console.Clear();
-                DisplayScreen(resultAction);
             }
-            //Couleurs quand le premier joueur défend
-            if (resultAction[0] == '2' && resultAction[1] != '2')
-            {
-                System.Threading.Thread.Sleep(coloredTime);
-
-                Console.Clear();
-                Console.BackgroundColor = secondColor;
-                DisplayScreen(resultAction);
-                Console.BackgroundColor = ConsoleColor.Black;
-                System.Threading.Thread.Sleep(coloredTime);
-
-                Console.Clear();
-                DisplayScreen(resultAction);
-            }
-            //Couleurs quand le deuxième joueur défend
-            if (resultAction[0] != '2' && resultAction[1] == '2')
+            // Si l'ia ne défend pas on fait un effet de couleur.
+            if (resultAction[1] != '2')
             {
                 Console.Clear();
                 Console.BackgroundColor = firstColor;
@@ -595,12 +590,14 @@ namespace Fightasy
                 Console.BackgroundColor = ConsoleColor.Black;
                 System.Threading.Thread.Sleep(coloredTime);
 
-
                 Console.Clear();
                 DisplayScreen(resultAction);
+                System.Threading.Thread.Sleep(coloredTime * 2);
             }
         }
-        //Affichage du tableau des scores après la simulation
+        /** Affichage du tableau des scores après la simulation 
+         * <param name="scores"> tableau des scores généré par la simulation </param>
+         */
         public void DisplayStats(int[,] scores)
         {
             Console.Clear();
@@ -647,12 +644,18 @@ namespace Fightasy
                     {
                         Console.Write("|    X    ");
                     }
+                    //Score de 3 chiffres
+                    else if (score.ToString().Length >= 3)
+                    {
+                        Console.Write($"|  ");
+                        WriteInColor(color, score.ToString() + "%   ");
+                    }
                     //Score de 2 chiffres
                     else if (score.ToString().Length >= 2)
                     {
                         Console.Write($"|   ");
                         WriteInColor(color, score.ToString() + "%   ");
-                    } 
+                    }
                     //Score de 1 chiffre (un espace en plus pour ne pas décaler les colonnes du tableau)
                     else
                     {
@@ -665,7 +668,10 @@ namespace Fightasy
             }
             Console.WriteLine(sep);
         }
-        //Récupère les informations de fin de partie (qui a gagné ou égalité)
+
+        /** Récupère les informations de fin de partie (qui a gagné ou égalité) 
+         * <param name="gameResult"> Code du résultat de la partie. </param>
+         */
         public void DisplayEndScreen(int gameResult) { this.gameResult = gameResult; Console.Clear(); }
     }
 }
