@@ -10,10 +10,12 @@ namespace Fightasy
         protected ConsoleColor classColor;
         protected string name;
         protected string capacityName;
+        protected string description;
 
         public int GetDamage()  { return this.damage; }
         public int GetHealth()  { return this.health; }
         public string GetName() { return this.name;   }
+        public string GetDescription() { return this.description; }
         public string GetCapacityName() { return this.capacityName; }
         public ConsoleColor GetClassColor() { return this.classColor; }
 

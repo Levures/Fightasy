@@ -11,6 +11,7 @@ namespace Fightasy
             health = 5;
             damage = 1;
             capacityName = "Attaque puissante";
+            description = "Sacrifie un de ses poitns de vie pour infliger un dégât de plus à l'adversaire";
         }
     
         public override void SpecialCapacity()

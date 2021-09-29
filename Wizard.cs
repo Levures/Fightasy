@@ -11,6 +11,7 @@ namespace Fightasy
             health = 3;
             damage = 2;
             capacityName = "Contre-sort";
+            description = "Bloque la capacité spéciale de l'adversaire si elle est lancée, et inflige un point de dégât en retour.";
         }
     }
 }
