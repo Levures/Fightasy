@@ -530,13 +530,14 @@ namespace Fightasy
             Console.Write(msg);
             Console.ForegroundColor = ConsoleColor.Gray;
         }
-
+        //Changement de la couleur de l'espace de jeu en fonction de l'action choisie
         public void ColoredScreen(string resultAction, bool textBoxSep = true)
         {
             int coloredTime = 70;
             int msgTime = 2000;
             ConsoleColor firstColor = new ConsoleColor();
             ConsoleColor secondColor = new ConsoleColor();
+            //Assignation de la couleur du spécial en fonction de la classe
             switch (resultAction[0])
             {
                 case '1': firstColor = ConsoleColor.Red; break;
@@ -549,7 +550,7 @@ namespace Fightasy
                 case '3': secondColor = ctrl.computer.GetClassColor(); break;
                 default: break;
             }
-
+            //Couleurs quand aucun des deux joueurs défendent
             if (resultAction[0] != '2' && resultAction[1] != '2')
             {
                 Console.Clear();
@@ -571,7 +572,7 @@ namespace Fightasy
                 Console.Clear();
                 DisplayScreen(resultAction);
             }
-
+            //Couleurs quand le premier joueur défend
             if (resultAction[0] == '2' && resultAction[1] != '2')
             {
                 System.Threading.Thread.Sleep(coloredTime);
@@ -585,7 +586,7 @@ namespace Fightasy
                 Console.Clear();
                 DisplayScreen(resultAction);
             }
-
+            //Couleurs quand le deuxième joueur défend
             if (resultAction[0] != '2' && resultAction[1] == '2')
             {
                 Console.Clear();
@@ -599,12 +600,12 @@ namespace Fightasy
                 DisplayScreen(resultAction);
             }
         }
-
+        //Affichage du tableau des scores après la simulation
         public void DisplayStats(int[,] scores)
         {
             Console.Clear();
 
-
+            //Affichage des noms des différents personnages sur la première ligne
             string sep =       "+---------+---------+---------+---------+---------+---------+";
             string sepEmpty =  "|         |         |         |         |         |         |";
             Console.WriteLine($"{sep} \n{sepEmpty}");
@@ -621,6 +622,7 @@ namespace Fightasy
             Console.WriteLine("|");
             Console.WriteLine(sepEmpty);
 
+            //Affichage des noms des personnages sur la première colonne
             for (int j = 0; j < 5; j++)
             {
                 Console.WriteLine(sep);
@@ -633,22 +635,25 @@ namespace Fightasy
                     case 3: Console.Write("|");  WriteInColor(ConsoleColor.Magenta, " Warlock "); break;
                     case 4: Console.Write("|");  WriteInColor(ConsoleColor.Blue, "  Wizard "); break;
                 }
+                //Affichage des scores en rouge si le score est inférieur à 50, vert si il est supérieur 50 et un "X" si le score est égal à 0
                 for (int k = 0; k < 5; k++)
                 {
                     int score = 100 - scores[j,k] / 10;
                     ConsoleColor color;
                     if (score <= 50) color = ConsoleColor.Red;
                     else color = ConsoleColor.Green;
-
+                    //Score égal à 0
                     if (j == k)
                     {
                         Console.Write("|    X    ");
                     }
+                    //Score de 2 chiffres
                     else if (score.ToString().Length >= 2)
                     {
                         Console.Write($"|   ");
                         WriteInColor(color, score.ToString() + "%   ");
                     } 
+                    //Score de 1 chiffre (un espace en plus pour ne pas décaler les colonnes du tableau)
                     else
                     {
                         Console.Write($"|    ");
@@ -660,7 +665,7 @@ namespace Fightasy
             }
             Console.WriteLine(sep);
         }
-
+        //Récupère les informations de fin de partie (qui a gagné ou égalité)
         public void DisplayEndScreen(int gameResult) { this.gameResult = gameResult; Console.Clear(); }
     }
 }
