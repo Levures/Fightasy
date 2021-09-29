@@ -24,7 +24,7 @@ namespace Fightasy
                 if (prob == 0) health = 0;
                 else if (prob <= 4) --health;
                 else if (prob <= 8) ++damage;
-                else if (prob == 9) damage += 2;
+                else if (prob == 9) damage += 4;
             }
             else alreadyGave = true;
         }
