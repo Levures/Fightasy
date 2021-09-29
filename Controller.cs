@@ -78,6 +78,8 @@ namespace Fightasy
 
                     string[] tmpMessage1 = new string[1];
                     string[] tmpMessage2 = new string[2];
+                    int tmpHealth;
+                    int tmpDamage;
 
                     switch (resultAction)
                     {
@@ -113,86 +115,195 @@ namespace Fightasy
                             tmpMessage1[0] = $"Vous utilisez {player.GetCapacityName()} contre {computer.GetCapacityName()}";
                             display.ColoredMessage(tmpMessage1, resultAction);
 
+                            tmpHealth = player.GetHealth();
+                            tmpDamage = player.GetDamage();
                             player.SpecialCapacity();
+
+                            if (player.GetName() == "Warlock" && (player.GetHealth() < tmpHealth || player.GetDamage() > tmpDamage))
+                            {
+                                if (player.GetHealth() == 0)
+                                {
+                                    tmpMessage1[0] = "Votre de don de sang n'a pas plu aux dieux noirs, ils ont décidé de vous sacrifier...";
+                                    display.DisplayTextBox(tmpMessage1, false);
+                                    System.Threading.Thread.Sleep(2000);
+                                    break;
+                                }
+                                else if (player.GetHealth() < tmpHealth) tmpMessage1[0] = "Votre de don de sang n'est pas suffisant...";
+                                else if (player.GetDamage() + 2 == tmpDamage) tmpMessage1[0] = "Les dieux noirs vous bénissent, vous êtes maintenant bien plus puissant !";
+                                else if (player.GetDamage() > tmpDamage) tmpMessage1[0] = "Les dieux noirs acceptent votre sang, vous gagnez en puissance !";
+                                display.DisplayTextBox(tmpMessage1, false);
+                                System.Threading.Thread.Sleep(2000);
+                            }
+
+                            tmpHealth = computer.GetHealth();
+                            tmpDamage = computer.GetDamage();
                             computer.SpecialCapacity();
+
+                            if (computer.GetName() == "Warlock" && (computer.GetHealth() < tmpHealth || computer.GetDamage() > tmpDamage))
+                            {
+                                if (computer.GetHealth() == 0)
+                                {
+                                    tmpMessage1[0] = "Votre adversaire viens de se sacrifier aux dieux noirs...";
+                                    display.DisplayTextBox(tmpMessage1, false);
+                                    System.Threading.Thread.Sleep(2000);
+                                    break;
+                                }
+                                else if (computer.GetHealth() < tmpHealth) tmpMessage1[0] = "Votre adversaire offre son sang... en vain...";
+                                else if (computer.GetDamage() + 2 == tmpDamage) tmpMessage1[0] = "Votre adversaire semble devenir plus fort !";
+                                else if (computer.GetDamage() > tmpDamage) tmpMessage1[0] = "Les dieux noirs ont accordé leur puissance à votre adversaire !";
+                                display.DisplayTextBox(tmpMessage1, false);
+                                System.Threading.Thread.Sleep(2000);
+                            }
 
                             if (player.GetName() == "Tank")
+                            {
                                 computer.Hit(player.GetDamage());
-
+                                player.SpecialCapacity();
+                            }
                             if (computer.GetName() == "Tank")
+                            {
                                 player.Hit(computer.GetDamage());
-
-
-                            player.SpecialCapacity();
-                            computer.SpecialCapacity();
+                                computer.SpecialCapacity();
+                            }
                             break;
 
                         case "13": //Joueur : Attaque |-| IA : Spécial
                             tmpMessage1[0] = $"Vous attaquez contre {computer.GetCapacityName()}";
                             display.ColoredMessage(tmpMessage1, resultAction);
 
+                            tmpHealth = computer.GetHealth();
+                            tmpDamage = computer.GetDamage();
                             computer.SpecialCapacity();
+
+                            if (computer.GetName() == "Warlock" && (computer.GetHealth() < tmpHealth || computer.GetDamage() > tmpDamage))
+                            {
+                                if (computer.GetHealth() == 0)
+                                {
+                                    tmpMessage1[0] = "Votre adversaire viens de se sacrifier aux dieux noirs...";
+                                    display.DisplayTextBox(tmpMessage1, false);
+                                    System.Threading.Thread.Sleep(2000);
+                                    break;
+                                }
+                                else if (computer.GetHealth() < tmpHealth) tmpMessage1[0] = "Votre adversaire offre son sang... en vain...";
+                                else if (computer.GetDamage() + 2 == tmpDamage) tmpMessage1[0] = "Votre adversaire semble devenir plus fort !";
+                                else if (computer.GetDamage() > tmpDamage) tmpMessage1[0] = "Les dieux noirs ont accordé leur puissance à votre adversaire !";
+                                display.DisplayTextBox(tmpMessage1, false);
+                                System.Threading.Thread.Sleep(2000);
+                            }
 
                             computer.Hit(player.GetDamage());
 
                             if (computer.GetName() == "Tank")
+                            {
                                 player.Hit(computer.GetDamage());
+                                computer.SpecialCapacity();
+                            }
 
                             if (computer.GetName() == "Damager")
                                 player.Hit(player.GetDamage());
 
-                            computer.SpecialCapacity();
                             break;
 
                         case "31": //Joueur : Spécial |-| IA : Attaque
                             tmpMessage1[0] = $"Vous utilisez {player.GetCapacityName()} contre l'attaque ennemie";
                             display.ColoredMessage(tmpMessage1, resultAction);
 
+                            tmpHealth = player.GetHealth();
+                            tmpDamage = player.GetDamage();
                             player.SpecialCapacity();
+
+                            if (player.GetName() == "Warlock" && (player.GetHealth() < tmpHealth || player.GetDamage() > tmpDamage))
+                            {
+                                if (player.GetHealth() == 0)
+                                {
+                                    tmpMessage1[0] = "Votre de don de sang n'a pas plu aux dieux noirs, ils ont décidé de vous sacrifier...";
+                                    display.DisplayTextBox(tmpMessage1, false);
+                                    System.Threading.Thread.Sleep(2000);
+                                    break;
+                                }
+                                else if (player.GetHealth() < tmpHealth) tmpMessage1[0] = "Votre de don de sang n'est pas suffisant...";
+                                else if (player.GetDamage() + 2 == tmpDamage) tmpMessage1[0] = "Les dieux noirs vous bénissent, vous êtes maintenant bien plus puissant !";
+                                else if (player.GetDamage() > tmpDamage) tmpMessage1[0] = "Les dieux noirs acceptent votre sang, vous gagnez en puissance !";
+                                display.DisplayTextBox(tmpMessage1, false);
+                                System.Threading.Thread.Sleep(2000);
+                            }
 
                             player.Hit(computer.GetDamage());
 
                             if (player.GetName() == "Tank")
+                            {
                                 computer.Hit(player.GetDamage());
+                                player.SpecialCapacity();
+                            }
 
                             if (player.GetName() == "Damager")
                                 computer.Hit(computer.GetDamage());
 
-                            player.SpecialCapacity();
                             break;
 
                         case "23": //Joueur : Défend |-| IA : Spécial
                             tmpMessage1[0] = $"Vous essayez de vous défendre contre {computer.GetCapacityName()}";
                             display.ColoredMessage(tmpMessage1, resultAction);
 
+                            tmpHealth = computer.GetHealth();
+                            tmpDamage = computer.GetDamage();
                             computer.SpecialCapacity();
+
+                            if (computer.GetName() == "Warlock" && (computer.GetHealth() < tmpHealth || computer.GetDamage() > tmpDamage))
+                            {
+                                if (computer.GetHealth() == 0)
+                                {
+                                    tmpMessage1[0] = "Votre adversaire viens de se sacrifier aux dieux noirs...";
+                                    display.DisplayTextBox(tmpMessage1, false);
+                                    System.Threading.Thread.Sleep(2000);
+                                    break;
+                                }
+                                else if (computer.GetHealth() < tmpHealth) tmpMessage1[0] = "Votre adversaire offre son sang... en vain...";
+                                else if (computer.GetDamage() + 2 == tmpDamage) tmpMessage1[0] = "Votre adversaire semble devenir plus fort !";
+                                else if (computer.GetDamage() > tmpDamage) tmpMessage1[0] = "Les dieux noirs ont accordé leur puissance à votre adversaire !";
+                                display.DisplayTextBox(tmpMessage1, false);
+                                System.Threading.Thread.Sleep(2000);
+                            }
 
                             if (computer.GetName() == "Tank")
-                                player.Hit(computer.GetDamage()-1);
-
-                            computer.SpecialCapacity();
+                            {
+                                player.Hit(computer.GetDamage() - 1);
+                                computer.SpecialCapacity();
+                            }
                             break;
 
                         case "32": //Joueur : Spécial |-| IA : Défend
                             tmpMessage1[0] = $"Vous utilisez {player.GetCapacityName()} contre la défense ennemie";
                             display.ColoredMessage(tmpMessage1, resultAction);
 
+                            tmpHealth = player.GetHealth();
+                            tmpDamage = player.GetDamage();
                             player.SpecialCapacity();
+
+                            if (player.GetName() == "Warlock" && (player.GetHealth() < tmpHealth || player.GetDamage() > tmpDamage))
+                            {
+                                if (player.GetHealth() == 0)
+                                {
+                                    tmpMessage1[0] = "Votre de don de sang n'a pas plu aux dieux noirs, ils ont décidé de vous sacrifier...";
+                                    display.DisplayTextBox(tmpMessage1, false);
+                                    System.Threading.Thread.Sleep(2000);
+                                    break;
+                                }
+                                else if (player.GetHealth() < tmpHealth) tmpMessage1[0] = "Votre de don de sang n'est pas suffisant...";
+                                else if (player.GetDamage() + 2 == tmpDamage) tmpMessage1[0] = "Les dieux noirs vous bénissent, vous êtes maintenant bien plus puissant !";
+                                else if (player.GetDamage() > tmpDamage) tmpMessage1[0] = "Les dieux noirs acceptent votre sang, vous gagnez en puissance !";
+                                display.DisplayTextBox(tmpMessage1, false);
+                                System.Threading.Thread.Sleep(2000);
+                            }
 
                             if (player.GetName() == "Tank")
-                                computer.Hit(player.GetDamage()-1);
-
-                            player.SpecialCapacity();
+                            {
+                                computer.Hit(player.GetDamage() - 1);
+                                player.SpecialCapacity();
+                            }
                             break;
-
-                        default:
-                            Console.WriteLine("WIP");
-                            break;
-
-
                     }
                     System.Threading.Thread.Sleep(1000);
-
                 }
             }
             else

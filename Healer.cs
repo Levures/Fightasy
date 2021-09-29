@@ -8,8 +8,6 @@ namespace Fightasy
 {
     class Healer : Character
     {
-        bool usedHeal;
-
         public Healer()
         {
             name = "Healer";
@@ -17,18 +15,8 @@ namespace Fightasy
             health = 4;
             damage = 1;
             capacityName = "Soins";
-            usedHeal = false;
         }
 
-        public override void SpecialCapacity() 
-        {
-            if (!usedHeal)
-            {
-                ++health;
-                usedHeal = true;
-            }
-            else
-                usedHeal = false;
-        }
+        public override void SpecialCapacity() { ++health; }
     }
 }
