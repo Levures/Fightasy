@@ -60,7 +60,7 @@ namespace Fightasy
                 iaCharacters = new List<Character> { new Damager(), new Tank(), new Healer(), new Warlock(), new Wizard() };
                 // Choix des classes pour les deux joueurs.
                 player = playerCharacters[display.ChooseBox(2) - 1];
-                computer = iaCharacters[3];//[rand.Next(iaCharacters.Count - 1)];
+                computer = iaCharacters[rand.Next(iaCharacters.Count - 1)];
 
                 // Affichage du titre du jeu.
                 display.DisplayTextBox(new string[1] { "FIGHTASY : le jeu de combat" }, true);
@@ -84,7 +84,7 @@ namespace Fightasy
                     // Choix de l'action du joueur.
                     playerAction = display.ChooseBox(3);
                     // Choix de l'action de l'Intelligence artificielle.
-                    computerAction = 3;//IAChoices();
+                    computerAction = IAChoices();
 
                     // Concaténation des codes de choix des deux joueurs en un seul code.
                     string resultAction = String.Concat(playerAction.ToString(), computerAction.ToString());
