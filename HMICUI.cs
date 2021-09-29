@@ -9,6 +9,10 @@ namespace Fightasy
     // Classe qui gère l'affichage en console.
     class HMICUI
     {
+        int gameResult = 0;
+
+
+
         /** Référence au contrôleur. */
         Controller ctrl;
         /** Symbole du curseur rajouté à la fin des boîtes de choix. */
@@ -86,6 +90,9 @@ namespace Fightasy
                         break;
                     case 3: DisplayActions(selection);
                         lineCount = 3;
+                        break;
+                    case 4: DisplayPlayAgain(selection);
+                        lineCount = 2;
                         break;
                 }
 
@@ -291,6 +298,72 @@ namespace Fightasy
 
             Console.WriteLine("\n" + sep2);
 
+        }
+
+        void DisplayPlayAgain(int selection)
+        {
+            string[] victory = { " __     __  ______   ______   ________  ______   _______   __      __  " ,
+                             "/  |   /  |/      | /      \\ /        |/      \\ /       \\ /  \\    /  | " ,
+                             "$$ |   $$ |$$$$$$/ /$$$$$$  |$$$$$$$$//$$$$$$  |$$$$$$$  |$$  \\  /$$/  " ,
+                             "$$ |   $$ |  $$ |  $$ |  $$/    $$ |  $$ |  $$ |$$ |__$$ | $$  \\/$$/   " ,
+                             "$$  \\ /$$/   $$ |  $$ |         $$ |  $$ |  $$ |$$    $$<   $$  $$/    " ,
+                             " $$  /$$/    $$ |  $$ |   __    $$ |  $$ |  $$ |$$$$$$$  |   $$$$/     " ,
+                             "  $$ $$/    _$$ |_ $$ \\__/  |   $$ |  $$ \\__$$ |$$ |  $$ |    $$ |     " ,
+                             "   $$$/    / $$   |$$    $$/    $$ |  $$    $$/ $$ |  $$ |    $$ |     " ,
+                             "    $/     $$$$$$/  $$$$$$/     $$/    $$$$$$/  $$/   $$/     $$/      " };
+
+            string[] defeat = { " _______   ________  ________  ________   ______   ________ " ,
+                                "/       \\ /        |/        |/        | /      \\ /        |" ,
+                                "$$$$$$$  |$$$$$$$$/ $$$$$$$$/ $$$$$$$$/ /$$$$$$  |$$$$$$$$/ " ,
+                                "$$ |  $$ |$$ |__    $$ |__    $$ |__    $$ |__$$ |   $$ |   " ,
+                                "$$ |  $$ |$$    |   $$    |   $$    |   $$    $$ |   $$ |   " ,
+                                "$$ |  $$ |$$$$$/    $$$$$/    $$$$$/    $$$$$$$$ |   $$ |   " ,
+                                "$$ |__$$ |$$ |_____ $$ |      $$ |_____ $$ |  $$ |   $$ |   " ,
+                                "$$    $$/ $$       |$$ |      $$       |$$ |  $$ |   $$ |   " ,
+                                "$$$$$$$/  $$$$$$$$/ $$/       $$$$$$$$/ $$/   $$/    $$/    "  };
+
+            string[] tie = { " __       __   ______   ________  ______   __    __        __    __  __    __  __       " ,
+                             "/  \\     /  | /      \\ /        |/      \\ /  |  /  |      /  \\  /  |/  |  /  |/  |      " ,
+                             "$$  \\   /$$ |/$$$$$$  |$$$$$$$$//$$$$$$  |$$ |  $$ |      $$  \\ $$ |$$ |  $$ |$$ |      " ,
+                             "$$$  \\ /$$$ |$$ |__$$ |   $$ |  $$ |  $$/ $$ |__$$ |      $$$  \\$$ |$$ |  $$ |$$ |      " ,
+                             "$$$$  /$$$$ |$$    $$ |   $$ |  $$ |      $$    $$ |      $$$$  $$ |$$ |  $$ |$$ |      " ,
+                             "$$ $$ $$/$$ |$$$$$$$$ |   $$ |  $$ |   __ $$$$$$$$ |      $$ $$ $$ |$$ |  $$ |$$ |      " ,
+                             "$$ |$$$/ $$ |$$ |  $$ |   $$ |  $$ \\__/  |$$ |  $$ |      $$ |$$$$ |$$ \\__$$ |$$ |_____ " ,
+                             "$$ | $/  $$ |$$ |  $$ |   $$ |  $$    $$/ $$ |  $$ |      $$ | $$$ |$$    $$/ $$       |" ,
+                             "$$/      $$/ $$/   $$/    $$/    $$$$$$/  $$/   $$/       $$/   $$/  $$$$$$/  $$$$$$$$/ "  };
+
+            switch (gameResult)
+            {
+                case 1: foreach (string line in tie) { Console.WriteLine(line); } break;
+                case 2: foreach (string line in victory) { Console.WriteLine(line); } break;
+                case 3: foreach (string line in defeat) { Console.WriteLine(line); } break;
+                default: break;
+            }
+
+            Console.WriteLine("");
+
+            // Affichage du titre de la boîte.
+            string sep =  "+------------------------+";
+            string msg =  "|  Voulez vous rejouer ? |";
+
+            Console.WriteLine(sep + "\n" + msg + "\n" + sep);
+
+            //Affichage première ligne
+            Console.Write("| ");
+            if (selection == 1) WriteInColor(ConsoleColor.Green, "Oui                   ");
+            else Console.Write("Oui                   ");
+            Console.Write(" |");
+            if (selection == 1) WriteInColor(ConsoleColor.Green, cursor);
+            Console.WriteLine("");
+            Console.WriteLine(sep);
+            //Affichage deuxième ligne
+            Console.Write("| ");
+            if (selection == 2) WriteInColor(ConsoleColor.Green, "Non                   ");
+            else Console.Write("Non                   ");
+            Console.Write(" |");
+            if (selection == 2) WriteInColor(ConsoleColor.Green, cursor);
+            Console.WriteLine("");
+            Console.WriteLine(sep);
         }
 
         /** Méthode permettant d'afficher des messages entourés d'une "boîte" faite de +, - et de |.
@@ -609,6 +682,29 @@ namespace Fightasy
                 Console.WriteLine(sepEmpty);
             }
             Console.WriteLine(sep);
+        }
+
+
+        public void DisplayEndScreen(int playerHealth, int computerHealth)
+        {
+            Console.Clear();
+
+
+            if (playerHealth == computerHealth && playerHealth != 0) // Egalité
+            {
+                gameResult = 1;
+                ChooseBox(4);
+            }
+            else if (playerHealth > computerHealth) // Victoire Joueur
+            {
+                gameResult = 2;
+                ChooseBox(4);
+            }
+            else // Défaite joueur
+            {
+                gameResult = 3;
+                ChooseBox(4);
+            }
         }
     }
 }
