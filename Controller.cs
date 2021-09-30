@@ -120,11 +120,11 @@ namespace Fightasy
                             turnStateMessage = new string[] { $"Vous utilisez {player.GetCapacityName()} contre {computer.GetCapacityName()}" };
 
                             if (player.GetName() == "Warlock") specialMessage = new string[2] { WarlockSpecial(true)[0], "" };
-                            else if (player.GetName() == "Tank") TankSpecial(true);
+                            else if (player.GetName() == "Tank") TankSpecial(true,false);
                             else player.SpecialCapacity();
 
                             if (computer.GetName() == "Warlock") specialMessage[1] += WarlockSpecial(false)[0];
-                            else if (computer.GetName() == "Tank") TankSpecial(false);
+                            else if (computer.GetName() == "Tank") TankSpecial(false,false);
                             else computer.SpecialCapacity();
 
                             break;
@@ -134,7 +134,7 @@ namespace Fightasy
                             turnStateMessage = new string[] { $"Vous attaquez contre {computer.GetCapacityName()}" };
 
                             if (computer.GetName() == "Warlock") specialMessage = WarlockSpecial(false);
-                            else if (computer.GetName() == "Tank") TankSpecial(false);
+                            else if (computer.GetName() == "Tank") TankSpecial(false,false);
                             else computer.SpecialCapacity();
 
                             computer.Hit(player.GetDamage());
@@ -147,7 +147,7 @@ namespace Fightasy
                             turnStateMessage = new string[] { $"Vous utilisez {player.GetCapacityName()} contre l'attaque ennemie" };
 
                             if (player.GetName() == "Warlock") specialMessage = WarlockSpecial(true);
-                            else if (player.GetName() == "Tank") TankSpecial(true);
+                            else if (player.GetName() == "Tank") TankSpecial(true,false);
                             else player.SpecialCapacity();
 
                             player.Hit(computer.GetDamage());
@@ -160,7 +160,7 @@ namespace Fightasy
                             turnStateMessage = new string[] { $"Vous essayez de vous défendre contre {computer.GetCapacityName()}" };
 
                             if (computer.GetName() == "Warlock") specialMessage = WarlockSpecial(false);
-                            else if (computer.GetName() == "Tank") TankSpecial(false);
+                            else if (computer.GetName() == "Tank") TankSpecial(false,true);
                             else computer.SpecialCapacity();
 
                             break;
@@ -169,9 +169,9 @@ namespace Fightasy
                         case "32": {
                             turnStateMessage = new string[] { $"Vous utilisez {player.GetCapacityName()} contre la défense ennemie" };
 
-                            if (player.GetName() == "Warlock") specialMessage = WarlockSpecial(true);
-                            else if (player.GetName() == "Tank") TankSpecial(true);
-                            else player.SpecialCapacity();
+                                if (player.GetName() == "Warlock") specialMessage = WarlockSpecial(true);
+                                else if (player.GetName() == "Tank") TankSpecial(true,true);
+                                else player.SpecialCapacity();
 
                             break;
                         }
@@ -256,11 +256,11 @@ namespace Fightasy
                                         case "33":
                                             {
                                                 if (player.GetName() == "Warlock") WarlockSpecial(true);
-                                                else if (player.GetName() == "Tank") TankSpecial(true);
+                                                else if (player.GetName() == "Tank") TankSpecial(true,false);
                                                 else player.SpecialCapacity();
 
                                                 if (computer.GetName() == "Warlock") WarlockSpecial(false);
-                                                else if (computer.GetName() == "Tank") TankSpecial(false);
+                                                else if (computer.GetName() == "Tank") TankSpecial(false,false);
                                                 else computer.SpecialCapacity();
 
                                                 break;
@@ -269,7 +269,7 @@ namespace Fightasy
                                         case "13":
                                             {
                                                 if (computer.GetName() == "Warlock") WarlockSpecial(false);
-                                                else if (computer.GetName() == "Tank") TankSpecial(false);
+                                                else if (computer.GetName() == "Tank") TankSpecial(false,false);
                                                 else computer.SpecialCapacity();
 
                                                 computer.Hit(player.GetDamage());
@@ -281,7 +281,7 @@ namespace Fightasy
                                         case "31":
                                             {
                                                 if (player.GetName() == "Warlock") WarlockSpecial(true);
-                                                else if (player.GetName() == "Tank") TankSpecial(true);
+                                                else if (player.GetName() == "Tank") TankSpecial(true,false);
                                                 else player.SpecialCapacity();
 
                                                 player.Hit(computer.GetDamage());
@@ -293,7 +293,7 @@ namespace Fightasy
                                         case "23":
                                             {
                                                 if (computer.GetName() == "Warlock") WarlockSpecial(false);
-                                                else if (computer.GetName() == "Tank") TankSpecial(false);
+                                                else if (computer.GetName() == "Tank") TankSpecial(false,true);
                                                 else computer.SpecialCapacity();
 
                                                 break;
@@ -302,7 +302,7 @@ namespace Fightasy
                                         case "32":
                                             {
                                                 if (player.GetName() == "Warlock") WarlockSpecial(true);
-                                                else if (player.GetName() == "Tank") TankSpecial(true);
+                                                else if (player.GetName() == "Tank") TankSpecial(true,true);
                                                 else player.SpecialCapacity();
 
                                                 break;
@@ -390,7 +390,7 @@ namespace Fightasy
         }
 
         /** Méthode permettant de gérer les effets de la capacité spéciale du Tank. */
-        void TankSpecial( bool isPlayer)
+        void TankSpecial( bool isPlayer, bool defending)
         {
             Character user, target;
             if (isPlayer)
@@ -404,7 +404,8 @@ namespace Fightasy
                 target = player;
             }
             user.SpecialCapacity();
-            target.Hit(user.GetDamage());
+            if(defending) target.Hit(user.GetDamage()-1);
+            else target.Hit(user.GetDamage());
             user.SpecialCapacity();
         }
         /** Méthode permettant de gérer les effets de la capacité spéciale du Warlock. */
